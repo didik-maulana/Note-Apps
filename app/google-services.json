@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "366647781238",
+    "firebase_url": "https://note-apps-6cf3d.firebaseio.com",
+    "project_id": "note-apps-6cf3d",
+    "storage_bucket": "note-apps-6cf3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366647781238:android:86d8f74ebfbae8d6e07c57",
+        "android_client_info": {
+          "package_name": "com.didik.noteapps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366647781238-bvctv2lc1b476q2e80kjcj7birl3ogbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB7hnn6_M_qxlwz7KBMwSW_xoHdfD9Ujc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366647781238-bvctv2lc1b476q2e80kjcj7birl3ogbi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

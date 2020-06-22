@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Note Apps</string>
+    <string name="action_submit">Submit</string>
+    <string name="label_title">Title</string>
+    <string name="hint_title">Input Title</string>
+    <string name="label_description">Description</string>
+    <string name="hint_description">Input Description</string>
+    <string name="title_form">Save Your Daily Notes</string>
+    <string name="msg_empty_notes">Empty Notes</string>
+    <string name="msg_error_title_required">Title is required</string>
+    <string name="msg_error_description_required">Description is required</string>
+    <string name="action_add_note">Add Note</string>
+    <string name="msg_error_failed_fetch_note_from_database">Failed fetch note from database</string>
+    <string name="action_delete">Delete</string>
+</resources>
