@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.didik.noteapps.R
-import com.didik.noteapps.models.Note
+import com.didik.noteapps.data.models.Note
 import kotlinx.android.synthetic.main.item_note.view.*
 
 class NoteAdapter(

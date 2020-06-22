@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.didik.noteapps.R
+import com.didik.noteapps.data.models.Note
 import com.didik.noteapps.extensions.getValue
 import com.didik.noteapps.extensions.isBlank
 import com.didik.noteapps.extensions.isShow
 import com.didik.noteapps.extensions.showToast
-import com.didik.noteapps.models.Note
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_form.*
 

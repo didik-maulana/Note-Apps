@@ -2,28 +2,31 @@ package com.didik.noteapps.ui.note
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.didik.noteapps.R
+import com.didik.noteapps.data.models.Note
+import com.didik.noteapps.data.repository.NoteRepository
 import com.didik.noteapps.extensions.isShow
+import com.didik.noteapps.extensions.observe
 import com.didik.noteapps.extensions.showToast
-import com.didik.noteapps.models.Note
+import com.didik.noteapps.ui.NoteViewModel
+import com.didik.noteapps.ui.ViewModelFactory
 import com.didik.noteapps.ui.form.FormActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_note.*
 
 class NoteActivity : AppCompatActivity() {
-    private val firebaseDatabase by lazy {
-        FirebaseDatabase.getInstance()
-    }
+
+    private lateinit var noteViewModel: NoteViewModel
     private lateinit var noteAdapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
         setupViewListener()
-        loadNoteFromDatabase()
+        initViewModel()
+        observeNotes()
+
+        noteViewModel.getNotes()
     }
 
     private fun setupViewListener() {
@@ -32,32 +35,25 @@ class NoteActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadNoteFromDatabase() {
-        setViewLoading(true)
+    private fun initViewModel() {
+        noteViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(NoteRepository())
+        ).get(NoteViewModel::class.java)
+    }
 
-        firebaseDatabase
-            .reference
-            .child("notes")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                    setViewLoading(false)
-                    showToast(getString(R.string.msg_error_failed_fetch_note_from_database))
-                }
+    private fun observeNotes() {
+        observe(noteViewModel.notes) { notes ->
+            setNoteAdapter(notes)
+        }
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val notes = mutableListOf<Note>()
+        observe(noteViewModel.isLoading) { isLoading ->
+            setViewLoading(isLoading)
+        }
 
-                    snapshot.children.forEach { dataSnapshot ->
-                        dataSnapshot.getValue(Note::class.java)?.let { note ->
-                            note.key = dataSnapshot.key
-                            notes.add(note)
-                        }
-                    }
-
-                    setNoteAdapter(notes)
-                    setViewLoading(false)
-                }
-            })
+        observe(noteViewModel.message) { message ->
+            showToast(message)
+        }
     }
 
     private fun setViewLoading(isShow: Boolean) {
@@ -65,8 +61,8 @@ class NoteActivity : AppCompatActivity() {
         notesRecyclerView.isShow(!isShow)
     }
 
-    private fun setNoteAdapter(notes: MutableList<Note>) {
-        noteAdapter = NoteAdapter(this@NoteActivity, notes)
+    private fun setNoteAdapter(notes: List<Note>) {
+        noteAdapter = NoteAdapter(this@NoteActivity, notes.toMutableList())
         notesRecyclerView.apply {
             adapter = noteAdapter
             clipToPadding = false

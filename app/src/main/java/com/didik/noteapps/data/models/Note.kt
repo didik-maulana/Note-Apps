@@ -1,4 +1,4 @@
-package com.didik.noteapps.models
+package com.didik.noteapps.data.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
