@@ -18,6 +18,9 @@ class NoteRepository {
 
     val notes: LiveData<List<Note>> = MutableLiveData()
     val isLoading: LiveData<Boolean> = MutableLiveData()
+    val isNoteInserted: LiveData<Boolean> = MutableLiveData()
+    val isNoteUpdated: LiveData<Boolean> = MutableLiveData()
+    val isNoteDeleted: LiveData<Boolean> = MutableLiveData()
     val message: LiveData<String> = MutableLiveData()
 
     suspend fun getNotes() = withContext(Dispatchers.IO) {
@@ -46,6 +49,54 @@ class NoteRepository {
             }
             notes.post(notesResult)
         }
+    }
+
+    suspend fun insertNote(note: Note) = withContext(Dispatchers.IO) {
+        isLoading.post(true)
+        firebaseDatabase.reference.child(TABLE_NAME).push()
+            .setValue(note)
+            .addOnSuccessListener {
+                isLoading.post(false)
+                isNoteInserted.post(true)
+            }
+            .addOnFailureListener {
+                isLoading.post(false)
+                isNoteInserted.post(false)
+                message.post("$it")
+            }
+    }
+
+    suspend fun updateNote(note: Note) = withContext(Dispatchers.IO) {
+        isLoading.post(true)
+        note.key?.let { key ->
+            firebaseDatabase.reference.child(TABLE_NAME).child(key)
+                .setValue(note)
+                .addOnSuccessListener {
+                    isLoading.post(true)
+                    isNoteUpdated.post(true)
+                }
+                .addOnFailureListener {
+                    isLoading.post(true)
+                    isNoteUpdated.post(false)
+                    message.post("$it")
+                }
+        }
+    }
+
+    suspend fun deleteNote(key: String) = withContext(Dispatchers.IO) {
+        isLoading.post(true)
+
+        firebaseDatabase.reference.child(TABLE_NAME).child(key)
+            .removeValue()
+            .addOnSuccessListener {
+                isLoading.post(false)
+                isNoteDeleted.post(true)
+            }
+            .addOnFailureListener {
+                isLoading.post(false)
+                isNoteDeleted.post(false)
+                message.post("$it")
+            }
     }
 
     companion object {
