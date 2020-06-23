@@ -4,36 +4,79 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.didik.noteapps.R
 import com.didik.noteapps.data.models.Note
-import com.didik.noteapps.extensions.getValue
-import com.didik.noteapps.extensions.isBlank
-import com.didik.noteapps.extensions.isShow
-import com.didik.noteapps.extensions.showToast
-import com.google.firebase.database.FirebaseDatabase
+import com.didik.noteapps.data.repository.NoteRepository
+import com.didik.noteapps.extensions.*
+import com.didik.noteapps.ui.NoteViewModel
+import com.didik.noteapps.ui.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_form.*
 
 class FormActivity : AppCompatActivity() {
-    private val firebaseDatabase by lazy {
-        FirebaseDatabase.getInstance()
-    }
-
-    private var note: Note? = null
+    private lateinit var noteViewModel: NoteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
+        initViewModel()
         setNoteFromIntent()
         setupViewListener()
+        observeFormAction()
+    }
+
+    private fun initViewModel() {
+        noteViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(NoteRepository())
+        ).get(NoteViewModel::class.java)
+    }
+
+    private fun observeFormAction() {
+        observe(noteViewModel.isLoading) { isLoading ->
+            loadingProgressBar.isShow(isLoading)
+            formGroup.isShow(!isLoading)
+        }
+
+        observe(noteViewModel.message) { message ->
+            showToast(message)
+        }
+
+        observe(noteViewModel.isNoteInserted) { isNoteInserted ->
+            if (isNoteInserted) {
+                showToast(getString(R.string.msg_success_note_inserted))
+                finish()
+            }
+        }
+
+        observe(noteViewModel.isNoteUpdated) { isNoteUpdated ->
+            if (isNoteUpdated) {
+                showToast(getString(R.string.msg_success_updated))
+                finish()
+            }
+        }
+
+        observe(noteViewModel.isNoteDeleted) { isNoteDeleted ->
+            if (isNoteDeleted) {
+                showToast(getString(R.string.msg_success_note_deleted))
+                finish()
+            }
+        }
     }
 
     private fun setNoteFromIntent() {
         if (intent?.hasExtra(EXTRA_NOTE) == true) {
-            note = intent?.getParcelableExtra(EXTRA_NOTE)
+            noteViewModel.note = intent?.getParcelableExtra(EXTRA_NOTE)
 
-            titleEditText.setText(note?.title)
-            descriptionEditText.setText(note?.description)
-            deleteButton.isShow(!note?.key.isNullOrBlank())
+            noteViewModel.note?.run {
+                titleEditText.setText(title)
+                descriptionEditText.setText(description)
+                deleteButton.isShow(!key.isNullOrBlank())
+
+                submitButton.text = getString(R.string.action_update)
+            }
+        } else {
+            noteViewModel.note = Note()
         }
     }
 
@@ -43,7 +86,7 @@ class FormActivity : AppCompatActivity() {
         }
 
         deleteButton.setOnClickListener {
-            deleteNote()
+            noteViewModel.deleteNote()
         }
     }
 
@@ -61,67 +104,16 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    private fun setShowLoading(isShow: Boolean) {
-        loadingProgressBar.isShow(isShow)
-        formGroup.isShow(!isShow)
-    }
-
     private fun sendNote() {
-        setShowLoading(true)
-
-        note?.apply {
+        noteViewModel.note?.apply {
             title = titleEditText.getValue()
             description = descriptionEditText.getValue()
         }
 
-        if (note?.key.isNullOrBlank()) {
-            insertNote()
+        if (noteViewModel.note?.key.isNullOrBlank()) {
+            noteViewModel.insertNote()
         } else {
-            updateNote()
-        }
-    }
-
-    private fun insertNote() {
-        firebaseDatabase.reference.child("notes").push()
-            .setValue(note)
-            .addOnSuccessListener {
-                showToast("Note saved to database")
-            }
-            .addOnFailureListener {
-                showToast("Failed, $it")
-            }
-    }
-
-    private fun updateNote() {
-        note?.key?.let { key ->
-            firebaseDatabase.reference.child("notes").child(key)
-                .setValue(note)
-                .addOnSuccessListener {
-                    setShowLoading(false)
-                    showToast("Note updated to database")
-                }
-                .addOnFailureListener {
-                    setShowLoading(false)
-                    showToast("Failed update note, $it")
-                }
-        }
-    }
-
-    private fun deleteNote() {
-        setShowLoading(true)
-
-        note?.key?.let { key ->
-            firebaseDatabase.reference.child("notes").child(key)
-                .removeValue()
-                .addOnSuccessListener {
-                    setShowLoading(false)
-                    showToast("Note deleted from database")
-                    finish()
-                }
-                .addOnFailureListener {
-                    setShowLoading(false)
-                    showToast("Failed delete note, $it")
-                }
+            noteViewModel.updateNote()
         }
     }
 

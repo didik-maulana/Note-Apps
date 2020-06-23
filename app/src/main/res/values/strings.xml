@@ -11,4 +11,8 @@
     <string name="msg_error_description_required">Description is required</string>
     <string name="action_add_note">Add Note</string>
     <string name="action_delete">Delete</string>
+    <string name="msg_success_note_inserted">Note success inserted</string>
+    <string name="msg_success_note_deleted">Note success deleted</string>
+    <string name="msg_success_updated">Note success updated</string>
+    <string name="action_update">Update</string>
 </resources>
