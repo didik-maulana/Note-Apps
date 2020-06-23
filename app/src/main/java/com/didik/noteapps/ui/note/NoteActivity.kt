@@ -45,6 +45,8 @@ class NoteActivity : AppCompatActivity() {
     private fun observeNotes() {
         observe(noteViewModel.notes) { notes ->
             setNoteAdapter(notes)
+            notesRecyclerView.isShow(!notes.isNullOrEmpty())
+            emptyTextView.isShow(notes.isNullOrEmpty())
         }
 
         observe(noteViewModel.isLoading) { isLoading ->
