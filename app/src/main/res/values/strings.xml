@@ -15,4 +15,6 @@
     <string name="msg_success_note_deleted">Note success deleted</string>
     <string name="msg_success_updated">Note success updated</string>
     <string name="action_update">Update</string>
+    <string name="action_search">Search</string>
+    <string name="hint_search_text">Enter your search query</string>
 </resources>

@@ -1,12 +1,15 @@
 package com.didik.noteapps.ui.note
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.didik.noteapps.R
 import com.didik.noteapps.data.models.Note
 import com.didik.noteapps.data.repository.NoteRepository
 import com.didik.noteapps.extensions.isShow
+import com.didik.noteapps.extensions.isVisible
 import com.didik.noteapps.extensions.observe
 import com.didik.noteapps.extensions.showToast
 import com.didik.noteapps.ui.NoteViewModel
@@ -27,6 +30,23 @@ class NoteActivity : AppCompatActivity() {
         observeNotes()
 
         noteViewModel.getNotes()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_action_bar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.searchMenu -> {
+                searchEditText.isShow(!searchEditText.isVisible())
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     private fun setupViewListener() {
@@ -58,11 +78,6 @@ class NoteActivity : AppCompatActivity() {
         }
     }
 
-    private fun setViewLoading(isShow: Boolean) {
-        loadingProgressBar.isShow(isShow)
-        notesRecyclerView.isShow(!isShow)
-    }
-
     private fun setNoteAdapter(notes: List<Note>) {
         noteAdapter = NoteAdapter(this@NoteActivity, notes.toMutableList())
         notesRecyclerView.apply {
@@ -73,5 +88,10 @@ class NoteActivity : AppCompatActivity() {
         noteAdapter.onItemClickListener = { note ->
             startActivity(FormActivity.getIntent(this, note))
         }
+    }
+
+    private fun setViewLoading(isShow: Boolean) {
+        loadingProgressBar.isShow(isShow)
+        notesRecyclerView.isShow(!isShow)
     }
 }

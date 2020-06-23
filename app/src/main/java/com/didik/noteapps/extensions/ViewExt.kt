@@ -9,3 +9,7 @@ fun View.isShow(isShow: Boolean) {
         View.GONE
     }
 }
+
+fun View.isVisible(): Boolean {
+    return visibility == View.VISIBLE
+}
