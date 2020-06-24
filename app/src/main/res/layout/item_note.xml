@@ -3,11 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/dp_16"
-    android:layout_marginTop="@dimen/dp_8"
-    android:layout_marginEnd="@dimen/dp_16"
-    android:layout_marginBottom="@dimen/dp_12">
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/noteCheckBox"
@@ -15,13 +11,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:visibility="gone" />
+        android:paddingStart="@dimen/dp_0"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_16" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemNoteView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_12"
         android:layout_toStartOf="@id/noteCheckBox"
         android:background="@drawable/bg_card_item_note"
         android:elevation="@dimen/dp_2"

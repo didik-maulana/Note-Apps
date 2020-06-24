@@ -15,11 +15,20 @@ class NoteAdapter(
     private val notes: MutableList<Note>
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    private var isSelectableNote = false
+    var isSelectableNote: Boolean = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     var onItemClickListener: (note: Note) -> Unit = {}
 
-    fun setSelectableNote(isShow: Boolean) {
-        isSelectableNote = isShow
+    fun setItems(notes: MutableList<Note>) {
+        this.notes.apply {
+            clear()
+            addAll(notes)
+        }
+        notifyDataSetChanged()
     }
 
     fun isNoteEmpty(): Boolean {

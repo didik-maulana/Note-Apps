@@ -27,6 +27,7 @@ class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
+        initNoteAdapter()
         setupViewListener()
         initViewModel()
         observeNotes()
@@ -48,7 +49,7 @@ class NoteActivity : AppCompatActivity() {
             }
             R.id.selectableMenu -> {
                 if (noteAdapter.isNoteEmpty()) {
-                    noteAdapter.setSelectableNote(true)
+                    noteAdapter.isSelectableNote = !noteAdapter.isSelectableNote
                 } else {
                     showToast(getString(R.string.msg_note_is_empty))
                 }
@@ -64,6 +65,10 @@ class NoteActivity : AppCompatActivity() {
         addNoteButton.setOnClickListener {
             startActivity(FormActivity.getIntent(this))
         }
+    }
+
+    private fun initNoteAdapter() {
+        noteAdapter = NoteAdapter(this@NoteActivity, mutableListOf())
     }
 
     private fun initViewModel() {
@@ -90,7 +95,8 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun setNoteAdapter(notes: List<Note>) {
-        noteAdapter = NoteAdapter(this@NoteActivity, notes.toMutableList())
+        noteAdapter.setItems(notes.toMutableList())
+
         notesRecyclerView.apply {
             adapter = noteAdapter
             clipToPadding = false
