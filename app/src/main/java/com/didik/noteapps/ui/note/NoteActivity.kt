@@ -49,6 +49,11 @@ class NoteActivity : AppCompatActivity() {
             }
             R.id.selectableMenu -> {
                 if (noteAdapter.isNoteEmpty()) {
+                    if (noteAdapter.isSelectableNote) {
+                        item.setIcon(R.drawable.ic_check_items)
+                    } else {
+                        item.setIcon(R.drawable.ic_close)
+                    }
                     noteAdapter.isSelectableNote = !noteAdapter.isSelectableNote
                 } else {
                     showToast(getString(R.string.msg_note_is_empty))
