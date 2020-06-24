@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,35 +7,51 @@
     android:layout_marginStart="@dimen/dp_16"
     android:layout_marginTop="@dimen/dp_8"
     android:layout_marginEnd="@dimen/dp_16"
-    android:layout_marginBottom="@dimen/dp_12"
-    android:background="@drawable/bg_card_item_note"
-    android:elevation="@dimen/dp_2"
-    android:padding="@dimen/dp_16"
-    app:layout_goneMarginBottom="@dimen/dp_8">
+    android:layout_marginBottom="@dimen/dp_12">
 
-    <TextView
-        android:id="@+id/titleNoteTextView"
-        android:layout_width="@dimen/dp_0"
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/noteCheckBox"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_16"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Learn android firebase" />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/descriptionNoteTextView"
-        android:layout_width="@dimen/dp_0"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemNoteView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_4"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="@color/gray"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleNoteTextView"
-        tools:text="Android firebase real time from scratch, using firebase platform." />
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_toStartOf="@id/noteCheckBox"
+        android:background="@drawable/bg_card_item_note"
+        android:elevation="@dimen/dp_2"
+        android:padding="@dimen/dp_16">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/titleNoteTextView"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Learn android firebase" />
+
+        <TextView
+            android:id="@+id/descriptionNoteTextView"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleNoteTextView"
+            tools:text="Android firebase real time from scratch, using firebase platform." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

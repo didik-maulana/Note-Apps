@@ -1,6 +1,8 @@
 package com.didik.noteapps.ui.note
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +30,7 @@ class NoteActivity : AppCompatActivity() {
         setupViewListener()
         initViewModel()
         observeNotes()
+        setSearchListener()
 
         noteViewModel.getNotes()
     }
@@ -41,6 +44,14 @@ class NoteActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.searchMenu -> {
                 searchEditText.isShow(!searchEditText.isVisible())
+                true
+            }
+            R.id.selectableMenu -> {
+                if (noteAdapter.isNoteEmpty()) {
+                    noteAdapter.setSelectableNote(true)
+                } else {
+                    showToast(getString(R.string.msg_note_is_empty))
+                }
                 true
             }
             else -> {
@@ -93,5 +104,17 @@ class NoteActivity : AppCompatActivity() {
     private fun setViewLoading(isShow: Boolean) {
         loadingProgressBar.isShow(isShow)
         notesRecyclerView.isShow(!isShow)
+    }
+
+    private fun setSearchListener() {
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(text: Editable?) {
+
+            }
+        })
     }
 }

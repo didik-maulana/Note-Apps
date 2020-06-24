@@ -7,5 +7,6 @@ import kotlinx.android.parcel.Parcelize
 data class Note(
     var key: String? = null,
     var title: String? = null,
-    var description: String? = null
+    var description: String? = null,
+    var isSelected: Boolean = false
 ) : Parcelable

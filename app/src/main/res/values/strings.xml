@@ -17,4 +17,6 @@
     <string name="action_update">Update</string>
     <string name="action_search">Search</string>
     <string name="hint_search_text">Enter your search query</string>
+    <string name="action_select_notes">Select Notes</string>
+    <string name="msg_note_is_empty">Note is empty</string>
 </resources>
